@@ -1,6 +1,6 @@
 # Tugas Besar Struktur Data
 
-Ryan Muhammad		          	( )  
+Ryan Muhammad		          	(103112400109)  
 Dwi Rahayu Putra      			( )  
 Neisya Azzahra Rasin	    	()  
 Syifa Kirana Putri Surya		(103112400111)  
