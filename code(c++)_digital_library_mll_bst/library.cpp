@@ -189,3 +189,117 @@ float avgTahun(Node* root) {
 // ===================================================================
 // ================= IMPLEMENTASI FUNGSI MLL =========================
 // ===================================================================
+
+// Dasar MLL
+void createListMLL(ListMLL &L) {
+         L.first = NULL;
+}
+
+bool isEmptyMLL(ListMLL L) {
+        return L.first == NULL;
+}
+
+adrMember alokasiMember(Member data) {
+
+}
+
+adrPinjam alokasiPinjam(string judul, string tgl) {
+
+}
+
+void dealokasiMember(adrMember &P) {
+
+}
+
+void dealokasiPinjam(adrPinjam &P) {
+
+}
+
+// Operasi CRUD Parent (Member)
+// -- insert
+void insertFirstMember(ListMLL &L, adrMember P) {
+
+}
+
+void insertLastMember(ListMLL &L, adrMember P) {
+
+}
+
+void insertAfterMember(ListMLL &L, adrMember prec, adrMember P) {
+
+}
+
+// -- delete
+void deleteFirstMember(ListMLL &L, adrMember &P) {
+        if (!isEmptyMLL(L)) {
+        P = L.first;
+        L.first = P->next;
+        dealokasiMember(P);
+    }
+}
+
+void deleteLastMember(ListMLL &L, adrMember &P) {
+    
+}
+
+void deleteMemberByID(ListMLL &L, string idMember) {
+    adrMember P = L.first;
+    adrMember prec = NULL;
+
+    while (P != NULL && P->info.idMember != idMember) {
+        prec = P;
+        P = P->next;
+    }
+
+    if (P != NULL) {
+        if (prec == NULL)
+            L.first = P->next;
+        else
+            prec->next = P->next;
+
+        // hapus semua pinjaman
+        adrPinjam C = P->firstPinjam;
+        while (C != NULL) {
+            adrPinjam temp = C;
+            C = C->next;
+            dealokasiPinjam(temp);
+        }
+        dealokasiMember(P);
+    }
+}
+// -- search
+adrMember searchMember(ListMLL L, string idMember) {
+
+}
+
+// Operasi Crud Child (Peminjaman)
+void insertPinjaman(ListMLL &L, string idMember, adrPinjam C) {
+
+}
+void deletePinjaman(ListMLL &L, string idMember, string judulBuku) {
+
+}
+
+// CHALLENGE
+bool isBookBorrowed(adrMember P, string judulBuku) {
+
+}
+
+void showAllData(ListMLL L) {
+
+}
+
+void showMostActiveMember(ListMLL L) {
+
+}
+
+void showLeastActiveMember(ListMLL L) {
+
+}
+
+void showMembersWithXLoans(ListMLL L, int x) {
+}
+
+// Cari Buku by Judul (Untuk Validasi MLL)
+Node* searchJudul(Node* root, string judul) {
+}
