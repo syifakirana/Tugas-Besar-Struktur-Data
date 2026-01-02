@@ -35,17 +35,24 @@ void menuTraversal() {
     cout << "Pilih: ";
 }
 
-// -- Bagian Menu MLL --
 void menuMLL() {
-    cout << "\n=== MENU MLL (PEMINJAMAN) ===\n";
-    cout << "1. Registrasi Member\n";
-    cout << "2. Tampilkan Data (Parent & Child)\n";
-    cout << "3. Cari Member\n";
-    cout << "4. Hapus Member\n";
-    cout << "5. Pinjam Buku (Integrasi ke BST)\n";
-    cout << "6. Kembalikan Buku\n";
-    cout << "7. [Challenge] Statistik Aktivitas Member\n";
-    cout << "8. [Challenge] Filter Jumlah Pinjaman\n";
+    cout << "\n===== MENU PEMINJAMAN (MLL) =====\n";
+    cout << "--- Create / Insert ---\n";
+    cout << "1. Registrasi Member (Insert Last - Standard)\n";
+    cout << "2. Registrasi VIP (Insert First - Testing)\n";
+    cout << "3. Registrasi Sisipan (Insert After - Testing)\n";
+    cout << "--- Read & Delete ---\n";
+    cout << "4. Tampilkan Semua Data\n";
+    cout << "5. Cari Member\n";
+    cout << "6. Hapus Member by ID (Delete Specific)\n";
+    cout << "7. Hapus Member Awal (Delete First)\n";
+    cout << "8. Hapus Member Akhir (Delete Last)\n";
+    cout << "--- Peminjaman (Child) ---\n";
+    cout << "9. PINJAM BUKU (Integrasi BST)\n";
+    cout << "10. KEMBALIKAN BUKU\n";
+    cout << "--- Statistik (Challenge) ---\n";
+    cout << "11. Statistik Aktivitas Member (Min/Max)\n";
+    cout << "12. Filter Jumlah Pinjaman\n";
     cout << "0. Kembali\n";
     cout << "Pilih: ";
 }
@@ -182,73 +189,105 @@ int main() {
                 cin >> pilihMLL;
                 cin.ignore();
 
-                if (pilihMLL == 1) {
+                if (pilihMLL == 1) { // Insert Last 
+                    cout << "--- Registrasi Member (Last) ---\n";
                     Member m = inputMember();
-                    // validasi id member unik
                     if (searchMember(L, m.idMember) == NULL) {
                         insertLastMember(L, alokasiMember(m));
-                        cout << "Member berhasil ditambahkan.\n";
-                    } else {
-                        cout << "ID Member sudah terdaftar.\n";
-                    }
-                } else if (pilihMLL == 2) {
+                        cout << "Member berhasil didaftarkan.\n";
+                    } else cout << "ERROR: ID Member sudah terdaftar!\n";
+                }
+                else if (pilihMLL == 2) { // Insert First
+                    cout << "--- Registrasi VIP (First) ---\n";
+                    Member m = inputMember();
+                    if (searchMember(L, m.idMember) == NULL) {
+                        insertFirstMember(L, alokasiMember(m)); // TESTING INSERT FIRST
+                        cout << "Member VIP berhasil didaftarkan di urutan awal.\n";
+                    } else cout << "Eror: ID Member sudah terdaftar!\n";
+                }
+                else if (pilihMLL == 3) { // Insert After
+                    cout << "--- Registrasi Sisipan (After) ---\n";
+                    string idPrec;
+                    cout << "Masukkan ID Member Sebelumnya (Predecessor): "; getline(cin, idPrec);
+                    adrMember prec = searchMember(L, idPrec);
+                    if (prec != NULL) {
+                        Member m = inputMember();
+                        if (searchMember(L, m.idMember) == NULL) {
+                            insertAfterMember(L, prec, alokasiMember(m)); // TESTING INSERT AFTER
+                            cout << "Member berhasil disisipkan setelah " << prec->info.nama << ".\n";
+                        } else cout << "ERROR: ID Member sudah terdaftar!\n";
+                    } else cout << "ERROR: ID Predecessor tidak ditemukan.\n";
+                }
+                else if (pilihMLL == 4) { // Show All
                     showAllData(L);
-                } else if (pilihMLL == 3) {
+                }
+                else if (pilihMLL == 5) { // Cari Member
                     string id;
-                    cout << "Masukkan ID Member: ";
-                    getline(cin, id);
+                    cout << "Masukkan ID Member: "; getline(cin, id);
                     adrMember P = searchMember(L, id);
-                    if (P) cout << ">> Ditemukan: " << P->info.nama << " - " << P->info.noTelp << endl;
-                    else cout << ">> Member tidak ditemukan.\n";
-                } else if (pilihMLL == 4) {
+                    if (P) cout << "Ditemukan: " << P->info.nama << " - " << P->info.noTelp << endl;
+                    else cout << "Member tidak ditemukan.\n";
+                }
+                else if (pilihMLL == 6) { // Hapus Member by ID
                     string id;
-                    cout << "Masukkan ID Member yang dihapus: ";
-                    getline(cin, id);
+                    cout << "Masukkan ID Member dihapus: "; getline(cin, id);
                     deleteMemberByID(L, id);
-                } else if (pilihMLL == 5) {
+                }
+                else if (pilihMLL == 7) { // Delete First
+                    adrMember P;
+                    deleteFirstMember(L, P); // TESTING DELETE FIRST
+                    if(P) cout << "Member urutan pertama berhasil dihapus.\n";
+                    else cout << "List kosong.\n";
+                }
+                else if (pilihMLL == 8) { // Delete Last
+                    adrMember P;
+                    deleteLastMember(L, P); // TESTING DELETE LAST
+                    if(P) cout << "Member urutan terakhir berhasil dihapus.\n";
+                    else cout << "List kosong.\n";
+                }
+                else if (pilihMLL == 9) { // PINJAM BUKU (INTEGRASI)
                     string id, judul, tgl;
-                    cout << "ID Member   : "; 
-                    getline(cin, id);
+                    cout << "ID Member   : "; getline(cin, id);
                     
-                    // 1. Cari Member di MLL
                     adrMember M = searchMember(L, id);
                     if (M == NULL) {
-                        cout << ">> ERROR: Member tidak ditemukan.\n";
+                        cout << "ERROR: Member tidak ditemukan.\n";
                     } else {
-                        cout << "Judul Buku  : "; 
-                        getline(cin, judul);
-                        // 2. Cek Buku di BST (Integrasi)
-                        // Pastikan fungsi searchJudul ada di library.cpp
+                        cout << "Judul Buku  : "; getline(cin, judul);
+                        
+                        // Validasi BST
                         if (searchJudul(root, judul) == NULL) {
-                            cout << ">> ERROR: Buku tidak terdaftar di Katalog Perpustakaan.\n";
+                            cout << "ERROR: Buku tidak terdaftar di Katalog Perpustakaan.\n";
                         } else {
-                            // 3. Cek apakah sedang dipinjam
                             if (!isBookBorrowed(M, judul)) {
                                 cout << "Tanggal Pinjam: "; getline(cin, tgl);
                                 insertPinjaman(L, id, alokasiPinjam(judul, tgl));
-                                cout << ">> Berhasil meminjam buku.\n";
+                                cout << "Berhasil meminjam buku.\n";
                             } else {
-                                cout << ">> ERROR: Member sedang meminjam buku ini.\n";
+                                cout << "ERROR: Member sedang meminjam buku ini.\n";
                             }
                         }
                     }
-            } else if (pilihMLL == 6) {
-                string id, judul;
-                cout << "ID Member   : "; getline(cin, id);
-                cout << "Judul Buku  : "; getline(cin, judul);
-                deletePinjaman(L, id, judul);
-            } else if (pilihMLL == 7) {
-                showMostActiveMember(L);
-                showLeastActiveMember(L);
-            } else if (pilihMLL == 8) {
-                int x;
-                cout << "Tampilkan member dengan jumlah pinjaman: ";
-                cin >> x;
-                showMembersWithXLoans(L, x);
-            }
-        }  while (pilihMLL != 0);
+                }
+                else if (pilihMLL == 10) { // Kembalikan Buku
+                    string id, judul;
+                    cout << "ID Member   : "; getline(cin, id);
+                    cout << "Judul Buku  : "; getline(cin, judul);
+                    deletePinjaman(L, id, judul);
+                }
+                else if (pilihMLL == 11) { // Statistik Min Max
+                    showMostActiveMember(L);
+                    showLeastActiveMember(L);
+                }
+                else if (pilihMLL == 12) { // Filter
+                    int x;
+                    cout << "Tampilkan member dengan jumlah pinjaman: "; cin >> x;
+                    showMembersWithXLoans(L, x);
+                }
+            } while (pilihMLL != 0);
         }
-    }while (pilihUtama != 0);
+
+    } while (pilihUtama != 0);
 
     cout << "Program selesai.\n";
     return 0;
